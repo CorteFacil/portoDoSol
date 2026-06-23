@@ -1,0 +1,87 @@
+.hero {
+  min-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+  color: #111;
+}
+
+.heroInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 48px 24px;
+}
+
+.brand h1 {
+  margin: 0 0 8px 0;
+  font-size: 2.6rem;
+  color: #000;
+}
+
+.lead {
+  margin: 0;
+  color: #374151;
+  font-size: 1.05rem;
+}
+
+.ctaArea {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.description {
+  max-width: 420px;
+  color: #374151;
+  margin: 0;
+}
+
+.primaryButton {
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.ghostButton {
+  background: transparent;
+  border: 1px solid #111;
+  color: #111;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.footer {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 32px;
+  padding: 18px 0;
+}
+
+.footerInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .heroInner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .ctaArea {
+    align-items: center;
+  }
+}
