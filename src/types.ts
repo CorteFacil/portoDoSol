@@ -1,16 +1,18 @@
-export interface Estado {
-  id: number
-  nomeEstado: string
-  siglaUf: string
-  regiaoGeografica?: string
-}
-
 export interface PaisIso {
   id: number
   nome: string
   sigla_iso2: string
   sigla_iso3: string
   ddi_telefone: number
+}
+
+export interface Estado {
+  id: number
+  nomeEstado: string
+  siglaUf: string
+  regiaoGeografica?: string
+  paisisoId?: number
+  paisiso?: PaisIso
 }
 
 export interface Hospede {
@@ -33,7 +35,16 @@ export interface TipoDeQuarto {
   precoDiaria: number
   capacidadeMax: number
   tipoCama: string
-  tamanho: string
+  tamanho: number
+}
+
+export interface Quarto {
+  id: number
+  numero: string
+  andar: number
+  status_quarto: 'Disponivel' | 'Ocupado' | 'Limpeza' | 'Manutencao'
+  tipoDeQuartoId: number
+  tipoDeQuarto?: TipoDeQuarto
 }
 
 export interface Reserva {
@@ -42,7 +53,7 @@ export interface Reserva {
   saidaAcomodacao: string
   numeroPessoas: number
   observacao?: string
-  status: number
+  status: number 
   hospedeId: number
   tipoDeQuartoId: number
   hospede?: Hospede
@@ -51,12 +62,17 @@ export interface Reserva {
   atualizadoEm?: string
 }
 
-export interface Quarto {
+export interface Estadia {
   id: number
-  numero: string
-  andar: number
-  tipoDeQuartoId: number
-  tipoDeQuarto?: TipoDeQuarto
+  checkIn: string
+  checkOut: string
+  valorTotalEstadia: number
+  reservaId: number
+  funcionarioId: number
+  quartoId: number
+  reserva?: Reserva
+  funcionario?: Funcionario
+  quarto?: Quarto
 }
 
 export interface Funcionario {
