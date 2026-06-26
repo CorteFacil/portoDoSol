@@ -1,4 +1,4 @@
-import { useState, type SyntheticEvent } from 'react'
+import { useState, useEffect, type SyntheticEvent } from 'react'
 
 interface TipoDeQuarto { id: number; nome: string }
 
@@ -6,16 +6,38 @@ interface ReservaFormProps {
   tipos: TipoDeQuarto[]
   hospedeId: number
   error?: string 
+  reservaEditando?: any // <-- NOVA PROP OPCIONAL (Não quebra outras páginas)
   onSubmit: (data: any) => void
   onCancel: () => void
 }
 
-export default function ReservaForm({ tipos, hospedeId, error, onSubmit, onCancel }: ReservaFormProps) {
+export default function ReservaForm({ tipos, hospedeId, error, reservaEditando, onSubmit, onCancel }: ReservaFormProps) {
   const [entradaAcomodacao, setEntradaAcomodacao] = useState('')
   const [saidaAcomodacao, setSaidaAcomodacao] = useState('')
   const [numeroPessoas, setNumeroPessoas] = useState('1')
   const [observacao, setObservacao] = useState('')
   const [tipoDeQuartoId, setTipoDeQuartoId] = useState('')
+
+  // NOVO: Monitora se tem reserva para editar e preenche os campos
+  useEffect(() => {
+    if (reservaEditando) {
+      // Extrai apenas a parte da data "YYYY-MM-DD" para o input funcionar
+      const formatData = (dataStr: string) => dataStr ? dataStr.split('T')[0] : '';
+      
+      setEntradaAcomodacao(formatData(reservaEditando.entradaAcomodacao));
+      setSaidaAcomodacao(formatData(reservaEditando.saidaAcomodacao));
+      setNumeroPessoas(String(reservaEditando.numeroPessoas));
+      setObservacao(reservaEditando.observacao || '');
+      setTipoDeQuartoId(String(reservaEditando.tipoDeQuartoId));
+    } else {
+      // Limpa os campos se for uma reserva nova
+      setEntradaAcomodacao('');
+      setSaidaAcomodacao('');
+      setNumeroPessoas('1');
+      setObservacao('');
+      setTipoDeQuartoId('');
+    }
+  }, [reservaEditando]);
 
   const getErro = (inclui: string[], exclui: string[] = []) => {
     if (!error) return null;
@@ -27,14 +49,12 @@ export default function ReservaForm({ tipos, hospedeId, error, onSubmit, onCance
     return encontradas.length > 0 ? encontradas.join(' ').trim() : null;
   };
 
-  // Adicionadas as palavras "data" e "reserva" para apontar para os campos de data
   const erroEntrada = getErro(['Entrada', 'data', 'reserva']);
   const erroSaida = getErro(['Saída', 'Saida']);
   const erroQuarto = getErro(['Quarto'], ['capacidade', 'pessoas']);
   const erroPessoas = getErro(['Pessoas', 'capacidade']);
   const erroObs = getErro(['Observação', 'Observacao']);
 
-  // SALVA-VIDAS: Se o erro não contiver palavras-chave dos campos, exibimos ele solto!
   const sentencas = error ? (error.match(/[^.!?]+[.!?]+/g) || [error]) : [];
   const errosUsados = [erroEntrada, erroSaida, erroQuarto, erroPessoas, erroObs].filter(Boolean).join(' ');
   const erroGeral = sentencas.filter(s => !errosUsados.includes(s.trim())).join(' ').trim();
@@ -49,7 +69,10 @@ export default function ReservaForm({ tipos, hospedeId, error, onSubmit, onCance
 
   return (
     <form className="w-full bg-white p-6 rounded-xl shadow-lg border border-[#EF9B1B]/20" onSubmit={handleSubmit}>
-      <h3 className="text-xl font-display font-bold mb-4 text-[#EF9B1B]">Nova Reserva</h3>
+      {/* Título dinâmico */}
+      <h3 className="text-xl font-admin font-bold mb-4 text-[#EF9B1B]">
+        {reservaEditando ? 'Editar Reserva' : 'Nova Reserva'}
+      </h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
         <div className="space-y-1">
@@ -101,7 +124,6 @@ export default function ReservaForm({ tipos, hospedeId, error, onSubmit, onCance
           {erroObs && <span className="text-xs text-red-500 block mt-1">{erroObs}</span>}
       </div>
 
-      {/* Caixa de fallback para erros não previstos */}
       {erroGeral && (
         <div className="mt-4 text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-200">
           {erroGeral}
@@ -112,8 +134,9 @@ export default function ReservaForm({ tipos, hospedeId, error, onSubmit, onCance
           <button type="button" onClick={onCancel} className="flex-1 py-2.5 rounded-lg font-medium border border-[#222020]/20 text-[#222020] hover:bg-gray-50 transition-colors">
             Cancelar
           </button>
+          {/* Botão dinâmico */}
           <button type="submit" className="flex-1 py-2.5 rounded-lg font-medium bg-[#EF9B1B] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:scale-95 transition-all">
-            Confirmar Reserva
+            {reservaEditando ? 'Salvar Alterações' : 'Confirmar Reserva'}
           </button>
       </div>  
     </form>

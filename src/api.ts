@@ -98,7 +98,7 @@ export const api = {
   // TIPOS DE QUARTO
   // ==========================================
   getTiposDeQuarto: (): Promise<TipoDeQuarto[]> => request('/tipo-de-quarto'),
-  createTipo: (payload: Omit<TipoDeQuarto, 'id'>): Promise<TipoDeQuarto> => request('/tipo-de-quarto', { method: 'POST', headers, body: JSON.stringify(payload) }),
+  createTipoDeQuarto: (payload: Omit<TipoDeQuarto, 'id'>): Promise<TipoDeQuarto> => request('/tipo-de-quarto', { method: 'POST', headers, body: JSON.stringify(payload) }),
   getTipoDeQuartoById: (id: number): Promise<TipoDeQuarto> => request(`/tipo-de-quarto/${id}`),
   updateTipoDeQuarto: (id: number, payload: Partial<TipoDeQuarto>): Promise<TipoDeQuarto> => request(`/tipo-de-quarto/${id}`, { method: 'PUT', headers, body: JSON.stringify(payload) }),
   deleteTipoDeQuarto: (id: number): Promise<void> => request(`/tipo-de-quarto/${id}`, { method: 'DELETE' }),

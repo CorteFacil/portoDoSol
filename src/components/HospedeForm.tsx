@@ -6,11 +6,12 @@ interface HospedeFormProp {
   paises: PaisIso[] 
   initialDoc?: string 
   error?: string 
+  hospedeEditando?: any // <-- NOVA PROP
   onSubmit: (data: any) => void
   onCancel: () => void
 }
 
-export default function HospedeForm({ estados, paises, initialDoc = '', error, onSubmit, onCancel }: HospedeFormProp) {
+export default function HospedeForm({ estados, paises, initialDoc = '', error, hospedeEditando, onSubmit, onCancel }: HospedeFormProp) {
   const [nome, setNome] = useState('');
   const [tipoDoc, setTipoDoc] = useState<'CPF' | 'Passaporte'>('CPF');
   const [cpfPassaporte, setCpfPassaporte] = useState(initialDoc);
@@ -21,8 +22,37 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, o
   const [paisId, setPaisId] = useState(''); 
 
   useEffect(() => {
-    if (initialDoc === '') setCpfPassaporte('');
-  }, [tipoDoc, initialDoc]);
+    if (hospedeEditando) {
+      setNome(hospedeEditando.nome || '')
+      setCpfPassaporte(hospedeEditando.cpfPassaporte || '')
+      setEmail(hospedeEditando.email || '')
+      setTelefone(hospedeEditando.telefone || '')
+      
+      // Formata a data para exibir no input type="date"
+      const formatData = (dataStr: string) => dataStr ? dataStr.split('T')[0] : '';
+      setNascimento(formatData(hospedeEditando.nascimento))
+      
+      setEstadoId(String(hospedeEditando.estadoId || ''))
+      
+      // Tenta achar o país baseando-se no estadoId carregado
+      if (hospedeEditando.estadoId && estados.length > 0) {
+          const estadoVinculado = estados.find(e => e.id === hospedeEditando.estadoId);
+          if (estadoVinculado && estadoVinculado.paisisoId) {
+            setPaisId(String(estadoVinculado.paisisoId));
+          }
+      }
+    } else {
+      setNome('')
+      setCpfPassaporte(initialDoc)
+      setTipoDoc('CPF')
+      setEmail('')
+      setTelefone('')
+      setNascimento('')
+      setEstadoId('')
+      setPaisId('')
+    }
+  }, [hospedeEditando, initialDoc, estados]); 
+  // Removi aquele pedaço quebrado que estava aqui embaixo!
 
   const getErro = (palavrasChave: string[]) => {
     if (!error) return null;

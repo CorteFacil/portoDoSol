@@ -253,7 +253,10 @@
   .font-display { font-family: var(--font-display); }
   .font-script { font-family: var(--font-script); }
   .font-body { font-family: var(--font-body); }
-  .font-admin { font-family: var(--font-admin); }
+  .font-admin { 
+    font-family: var(--font-admin);
+    font-weight: 300;
+  }
   
   .text-amber { color: var(--color-amber); }
   .bg-amber { background-color: var(--color-amber); }
