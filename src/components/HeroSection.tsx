@@ -9,7 +9,7 @@ export function HeroSection() {
       className="gsap-hero-section relative min-h-screen w-full bg-[#FFF8EF] flex flex-col justify-between overflow-hidden pt-[clamp(5rem,10vw,8rem)]"
       data-testid="section-hero"
     >
-      <div className="max-w-[1400px] mx-auto w-full px-6 md:px-12 lg:px-28 z-10">
+      <div className="max-w-[80vw] mx-auto w-full px-6 md:px-10 lg:px-12 z-10">
 
         {/* Eyebrow */}
         <span className="gsap-hero-eyebrow font-body font-medium text-[0.75rem] uppercase tracking-[0.12em] text-[#EF9B1B] mb-10 block">

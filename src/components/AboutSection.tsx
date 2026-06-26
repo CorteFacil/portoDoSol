@@ -30,7 +30,7 @@ export function AboutSection() {
       className="w-full bg-[#FFF8EF] py-[clamp(3rem,5vw,5rem)]"
       data-testid="section-about"
     >
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-28">
+      <div className="max-w-[80vw] mx-auto px-6 md:px-10 lg:px-12">
 
         {/* Section heading */}
         <div className="gsap-section-heading mb-12 md:mb-16">

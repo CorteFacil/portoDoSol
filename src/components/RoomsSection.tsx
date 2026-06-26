@@ -33,7 +33,7 @@ export function RoomsSection() {
       className="w-full bg-[#FFF8EF] py-[clamp(3rem,5vw,5rem)]"
       data-testid="section-rooms"
     >
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-28">
+      <div className="max-w-[80vw] mx-auto px-6 md:px-10 lg:px-12">
         <div className="gsap-section-heading mb-12 md:mb-16">
           <span className="font-body font-medium text-[0.75rem] uppercase tracking-[0.12em] text-[#EF9B1B] block mb-4">
             ACOMODAÇÕES

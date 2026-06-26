@@ -25,7 +25,7 @@ export function ContactSection() {
       className="w-full bg-[#FFF8EF] py-[clamp(5rem,10vw,9rem)]"
       data-testid="section-contact"
     >
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-28">
+      <div className="max-w-[80vw] mx-auto px-6 md:px-10 lg:px-12">
         <div className="gsap-contact-container grid grid-cols-1 lg:grid-cols-2 rounded-[1.25rem] shadow-sm">
           
           <div className="gsap-contact-photo h-[300px] md:h-[400px] lg:h-auto w-full lg:rounded-l-[1.25rem] rounded-t-[1.25rem] lg:rounded-tr-none overflow-hidden relative">
