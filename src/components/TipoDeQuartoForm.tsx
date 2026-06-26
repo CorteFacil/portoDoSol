@@ -58,6 +58,18 @@ export default function TipoDeQuartoForm({ tipoEditando, error, onSubmit, onCanc
   const errosUsados = [erroNome, erroPreco, erroCapacidade, erroCama, erroTamanho, erroDescricao].filter(Boolean).join(' ');
   const erroGeral = sentencas.filter(s => !errosUsados.includes(s.trim())).join(' ').trim();
 
+  function handleClickCancelar() {
+    if (!tipoEditando) {
+      setNome('');
+      setDescricao('');
+      setCapacidadeMax('');
+      setTipoCama('');
+      setTamanho('');
+      setPrecoDiaria('');
+    }
+    onCancel();
+  }
+
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
@@ -199,7 +211,7 @@ export default function TipoDeQuartoForm({ tipoEditando, error, onSubmit, onCanc
         <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
           <button 
             type="button" 
-            onClick={onCancel}
+            onClick={handleClickCancelar}
             className="px-8 py-3 rounded-xl font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors"
           >
             Cancelar

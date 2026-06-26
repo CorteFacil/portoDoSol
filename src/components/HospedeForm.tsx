@@ -108,6 +108,20 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, h
 
   const estadosFiltrados = estados.filter(estado => String(estado.paisisoId) === String(paisId));
 
+  function handleClickCancelar() {
+    if (!hospedeEditando) {
+      setNome('');
+      setCpfPassaporte(initialDoc);
+      setTipoDoc('CPF');
+      setEmail('');
+      setTelefone('');
+      setNascimento('');
+      setEstadoId('');
+      setPaisId('');
+    }
+    onCancel();
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
@@ -255,7 +269,7 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, h
         )}
 
         <div className="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-6">
-          <button type="button" onClick={onCancel} className="px-8 py-3 rounded-xl font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
+          <button type="button" onClick={handleClickCancelar} className="px-8 py-3 rounded-xl font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">
             Cancelar
           </button>
           <button type="submit" disabled={loading} className="px-8 py-3 bg-[#222020] text-white rounded-xl font-medium hover:bg-[#EF9B1B] transition-colors disabled:opacity-70 flex items-center gap-2">
