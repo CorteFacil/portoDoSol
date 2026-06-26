@@ -53,10 +53,8 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, h
     }
   }, [hospedeEditando, initialDoc, estados]); 
 
-  // Nova máquina de fatiar erros: Usa um truque seguro para não quebrar nos pontos do CPF
   const extrairSentencas = (texto: string) => {
     if (!texto) return [];
-    // Troca ". " por ".|" e depois corta no "|", preservando "NNN.NNN"
     return texto.replace(/([.!?])\s+/g, "$1|").split("|").filter(Boolean);
   };
 
@@ -103,6 +101,13 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, h
     setTelefone(v);
   };
 
+  const handlePaisChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPaisId(e.target.value);
+    setEstadoId('');
+  };
+
+  const estadosFiltrados = estados.filter(estado => String(estado.paisisoId) === String(paisId));
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
@@ -124,7 +129,6 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, h
         setPaisId('');
       }
     } catch (err) {
-      // O erro é tratado pelo pai
     } finally {
       setLoading(false);
     }
@@ -212,7 +216,7 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, h
             <label className="text-xs font-bold text-[#C47D0E] uppercase tracking-wider">País</label>
             <div className="relative">
               <Globe size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              <select value={paisId} onChange={(e) => setPaisId(e.target.value)} required
+              <select value={paisId} onChange={handlePaisChange} required
                 className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#EF9B1B]/40 focus:border-[#EF9B1B] outline-none transition-all text-gray-800 appearance-none">
                 <option value="">Selecione</option>
                 {paises?.map((pais) => <option key={pais.id} value={pais.id}>{pais.nome}</option>)}
@@ -221,15 +225,21 @@ export default function HospedeForm({ estados, paises, initialDoc = '', error, h
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold text-[#C47D0E] uppercase tracking-wider">Estado</label>
+            <label className={`text-xs font-bold uppercase tracking-wider transition-colors ${paisId ? 'text-[#C47D0E]' : 'text-gray-400'}`}>
+              Estado
+            </label>
             <div className="relative">
-              <MapPin size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              <select value={estadoId} onChange={(e) => setEstadoId(e.target.value)} required
-                className={`w-full pl-11 pr-4 py-3 rounded-xl border bg-gray-50 focus:bg-white focus:ring-2 outline-none transition-all text-gray-800 appearance-none ${
-                  erroEstado ? 'border-red-400 focus:ring-red-400/40 focus:border-red-500' : 'border-gray-200 focus:ring-[#EF9B1B]/40 focus:border-[#EF9B1B]'
+              <MapPin size={18} className={`absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${paisId ? 'text-gray-400' : 'text-gray-300'}`} />
+              <select value={estadoId} onChange={(e) => setEstadoId(e.target.value)} required disabled={!paisId}
+                className={`w-full pl-11 pr-4 py-3 rounded-xl border outline-none transition-all appearance-none ${
+                  !paisId 
+                    ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                    : erroEstado 
+                      ? 'bg-gray-50 focus:bg-white focus:ring-2 border-red-400 focus:ring-red-400/40 focus:border-red-500 text-gray-800' 
+                      : 'bg-gray-50 focus:bg-white focus:ring-2 border-gray-200 focus:ring-[#EF9B1B]/40 focus:border-[#EF9B1B] text-gray-800'
                 }`}>
-                <option value="">Selecione</option>
-                {estados?.map((estado) => <option key={estado.id} value={estado.id}>{estado.nomeEstado} - {estado.siglaUf}</option>)}
+                <option value="">{paisId ? "Selecione um estado" : "Selecione o país primeiro"}</option>
+                {estadosFiltrados.map((estado) => <option key={estado.id} value={estado.id}>{estado.nomeEstado} - {estado.siglaUf}</option>)}
               </select>
             </div>
             {erroEstado && <span className="text-xs text-red-500 font-medium block mt-1">{erroEstado}</span>}
